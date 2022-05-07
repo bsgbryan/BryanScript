@@ -18,6 +18,8 @@ Once I finish the book I'd like to update this vm in the following ways:
 3. Add dependency support (I'm super excited about this as I want to model it after the dependency specs from my little Node.js module, [Mädūl](https://github.com/bsgbryan/madul).
 4. Add `async`/`await` support
 
+I want to add multithreading support (both to the language and to the vm for compiling/executing) but, frankly, that terrifies me; so I'm going to hold off thinking about it too much for now 😅
+
 # Next steps
 
 In addition to the bytecode vm, I'd like to implement native support for:
