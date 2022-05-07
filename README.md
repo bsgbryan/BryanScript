@@ -3,9 +3,9 @@ Welcome! BryanScript is an experiment; I've been a hobbyist game developer for a
 
 I've wanted to learn about language, os, and game engine development. BryanScript is my first step on that journey.
 
-The idea is simple: take things I like/love from other languages (the dynamism/flexibility of JavaScript, the whitespace snesitivity of CoffeeScript/Python, etc) and see if they can be merged into one thing.
+The idea is simple: take things I like/love from other languages (the dynamism/flexibility of JavaScript, the whitespace sensitivity of CoffeeScript/Python, etc) and see if they can be merged into one thing.
 
-I also want to build a comprehensive toolchain; a test runner, simple ways to instrument code, and lot and *lots* of debugging support.
+I also want to build a comprehensive toolchain; a test runner, simple ways to instrument code, and lots ... and I mean *lots* ... of debugging support.
 
 # Starting point
 
