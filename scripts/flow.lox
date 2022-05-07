@@ -1,0 +1,26 @@
+var foo = true;
+
+if (foo) {
+    print "OHAI";
+}
+
+var bar = false;
+
+if (bar) {
+    print "nope";
+}
+else {
+    print "whoa!";
+}
+
+var count = 0;
+
+while (count < 3) {
+    print "well";
+
+    count = count + 1;
+}
+
+for (var i = 0; i < 10; i = i + 2) {
+    print "wait";
+}
