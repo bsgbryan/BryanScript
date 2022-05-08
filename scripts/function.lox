@@ -1,0 +1,12 @@
+fun areWeHavingItYet(answer) {
+    if (answer) {
+        print "Yes we are!";
+    }
+    else {
+        print "Oh, I'm sorry!";
+    }
+}
+
+print "Are we having fun?";
+
+areWeHavingItYet(true);
