@@ -17,6 +17,7 @@ Once I finish the book I'd like to update this vm in the following ways:
 2. Add support for `switch` statements (using hash table, unless I find a better option in the mean time)
 3. Add dependency support (I'm super excited about this as I want to model it after the dependency specs from my little Node.js module, [Mädūl](https://github.com/bsgbryan/madul).
 4. Add `async`/`await` support
+5. Add prefix and postfix incrementors/decrementors(`++`/`--`)
 
 I want to add multithreading support (both to the language and to the vm for compilation/execution) but, frankly, that terrifies me; so I'm going to hold off thinking about it too much for now 😅
 
