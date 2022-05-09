@@ -21,6 +21,7 @@ typedef enum {
     OP_DIVIDE,
     OP_RETURN,
     OP_NEGATE,
+    OP_CLOSURE,
     OP_GREATER,
     OP_CONSTANT,
     OP_MULTIPLY,

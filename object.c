@@ -80,6 +80,9 @@ void printObject(Value value) {
         case OBJ_STRING:
             printf("%s", AS_CSTRING(value));
             break;
+        case OBJ_CLOSURE:
+            printFunction(AS_CLOSURE(value)->function);
+            break;
         case OBJ_FUNCTION:
             printFunction(AS_FUNCTION(value));
             break;
@@ -117,4 +120,12 @@ ObjNative* newNative(NativeFn function) {
     native->function = function;
 
     return native;
+}
+
+ObjClosure* newClosure(ObjFunction* function) {
+    ObjClosure* closure = ALLOCATE_OBJ(ObjClosure, OBJ_CLOSURE);
+
+    closure->function = function;
+
+    return closure;
 }
