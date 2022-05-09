@@ -45,7 +45,7 @@ steps
 -----
 
 1. clone the repo
-2. In the cloned repo's root directory, enter `gcc memory.c value.c chunk.c debug.c vm.c scanner.c compiler.c object.c table.c main.c -o clox -Wall` (this compiles all the source files and generates the `clox` executable binary file)
-3. Enter `./clox ./scripts/globals.lox` (or any of the files in the `scripts` directory)
+2. In the cloned repo's root directory, enter `gcc memory.c value.c chunk.c debug.c vm.c scanner.c compiler.c object.c table.c main.c -o bsg -Wall` (this compiles all the source files and generates the `bsg` executable binary file)
+3. Enter `./bsg ./scripts/globals.bs` (or any of the files in the `scripts` directory)
 
 Feel free to create and execute your own files too!
