@@ -86,6 +86,9 @@ void printObject(Value value) {
         case OBJ_FUNCTION:
             printFunction(AS_FUNCTION(value));
             break;
+        case OBJ_UPVALUE: // Never actually used; just here to appease the compiler
+            printf("upvalue");
+            break;
     }
 }
 
@@ -106,8 +109,9 @@ ObjString* takeString(char* chars, int length) {
 ObjFunction* newFunction() {
     ObjFunction* function = ALLOCATE_OBJ(ObjFunction, OBJ_FUNCTION);
 
-    function->arity = 0;
-    function->name = NULL;
+    function->arity        = 0;
+    function->name         = NULL;
+    function->upvalueCount = 0;
 
     initChunk(&function->chunk);
 
@@ -123,9 +127,24 @@ ObjNative* newNative(NativeFn function) {
 }
 
 ObjClosure* newClosure(ObjFunction* function) {
+    ObjUpvalue** upvalues = ALLOCATE(ObjUpvalue*, function->upvalueCount);
+
+    for (int i = 0; i < function->upvalueCount; i++)
+        upvalues[i] = NULL;
+
     ObjClosure* closure = ALLOCATE_OBJ(ObjClosure, OBJ_CLOSURE);
 
-    closure->function = function;
+    closure->function     = function;
+    closure->upvalues     = upvalues;
+    closure->upvalueCount = function->upvalueCount;
 
     return closure;
+}
+
+ObjUpvalue* newUpvalue(Value* slot) {
+    ObjUpvalue* upvalue = ALLOCATE_OBJ(ObjUpvalue, OBJ_UPVALUE);
+
+    upvalue->location = slot;
+
+    return upvalue;
 }
