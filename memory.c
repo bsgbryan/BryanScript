@@ -92,6 +92,14 @@ static void blackenObject(Obj* object) {
 
             break;
 
+        case OBJ_CLASS: {
+            ObjClass* klass = (ObjClass*) object;
+
+            markObject((Obj*) klass->name);
+
+            break;
+        }
+
         case OBJ_FUNCTION: {
             ObjFunction* function = (ObjFunction*) object;
 
@@ -120,6 +128,18 @@ static void freeObject(Obj* object) {
     #endif
 
     switch (object->type) {
+        case OBJ_NATIVE:
+            FREE(ObjNative, object);
+            break;
+
+        case OBJ_UPVALUE:
+            FREE(ObjUpvalue, object);
+            break;
+
+        case OBJ_CLASS:
+            FREE(ObjClass, object);
+            break;
+
         case OBJ_CLOSURE: {
             ObjClosure* closure = (ObjClosure*) object;
 
@@ -129,14 +149,6 @@ static void freeObject(Obj* object) {
 
             break;
         }
-
-        case OBJ_NATIVE:
-            FREE(ObjNative, object);
-            break;
-
-        case OBJ_UPVALUE:
-            FREE(ObjUpvalue, object);
-            break;
 
         case OBJ_STRING: {
             ObjString* string = (ObjString*) object;

@@ -15,6 +15,7 @@ typedef enum {
     OP_LESS,
     OP_JUMP,
     OP_LOOP,
+    OP_CLASS,
     OP_EQUAL,
     OP_FALSE,
     OP_PRINT,

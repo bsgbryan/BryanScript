@@ -103,6 +103,9 @@ void printObject(Value value) {
         case OBJ_FUNCTION:
             printFunction(AS_FUNCTION(value));
             break;
+        case OBJ_CLASS:
+            printf("%s", AS_CLASS(value)->name->chars);
+            break;
         case OBJ_UPVALUE: // Never actually used; just here to appease the compiler
             printf("upvalue");
             break;
@@ -166,4 +169,12 @@ ObjUpvalue* newUpvalue(Value* slot) {
     upvalue->closed   = NIL_VAL;
 
     return upvalue;
+}
+
+ObjClass* newClass(ObjString* name) {
+    ObjClass* klass = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
+
+    klass->name = name;
+
+    return klass;
 }
