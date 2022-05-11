@@ -24,10 +24,15 @@ static uint32_t hashString(const char* key, int length) {
 static Obj* allocateObject(size_t size, ObjType type) {
     Obj* object = (Obj*) reallocate(NULL, 0, size);
 
-    object->type = type;
-    object->next = vm.objects;
+    object->type     = type;
+    object->next     = vm.objects;
+    object->isMarked = false;
 
     vm.objects = object;
+
+    #ifdef DEBUG_LOG_GC
+        printf("%p allocate %zu for %d\n", (void*) object, size, type);
+    #endif
 
     return object;
 }
@@ -40,7 +45,19 @@ static ObjString* allocateString(char* chars, int length, uint32_t hash) {
     string->chars = chars;
     string->hash = hash;
 
+    // TODO Find a way to implement the carbage collector
+    // that doesn't require this.
+    // This is needed to ensure that when/if the intern string
+    // table gets resized (which could trigger a GC run) `string`
+    // doesn't get skipped over in the marking phase (because the
+    // `allocateString` call hasn't finished executing, so `string`
+    // won't be referred to by anything, and the garbage collector will
+    // think it needs to be removed in the `sweep` phase).
+    push(OBJ_VAL(string));
+
     tableSet(&vm.strings, string, NIL_VAL);
+
+    pop();
 
     return string;
 }
