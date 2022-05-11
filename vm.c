@@ -74,11 +74,17 @@ void initVM() {
     initTable(&vm.globals);
     initTable(&vm.strings);
 
+    vm.initString = NULL;
+    vm.initString = copyString("init", 4);
+
     defineNative("clock", clockNative);
 }
 
 void freeVM() {
     freeTable(&vm.strings);
+
+    vm.initString = NULL;
+
     freeObjects();
 }
 
@@ -159,7 +165,25 @@ static bool callValue(Value callee, int argCount) {
 
                 vm.stackTop[-argCount - 1] = OBJ_VAL(newInstance(klass));
 
+                Value initializer;
+
+                if (tableGet(&klass->methods, vm.initString, &initializer))
+                    return call(AS_CLOSURE(initializer), argCount);
+                else if (argCount != 0) {
+                    runtimeError("Expected 0 arguments but got %d", argCount);
+
+                    return false;
+                }
+
                 return true;
+            }
+
+            case OBJ_BOUND_METHOD: {
+                ObjBoundMethod* bound = AS_BOUND_METHOD(callee);
+
+                vm.stackTop[-argCount - 1] = bound->receiver;
+
+                return call(bound->method, argCount);
             }
 
             default:
@@ -169,6 +193,24 @@ static bool callValue(Value callee, int argCount) {
     runtimeError("Can only call functions can classes.");
 
     return false;
+}
+
+static bool bindMethod(ObjClass* klass, ObjString* name) {
+    Value method;
+
+    if (!tableGet(&klass->methods, name, &method)) {
+        runtimeError("Undefined property '%s'.", name->chars);
+
+        return false;
+    }
+
+    ObjBoundMethod* bound = newBoundMethod(peek(0), AS_CLOSURE(method));
+
+    pop();
+
+    push(OBJ_VAL(bound));
+
+    return true;
 }
 
 static ObjUpvalue* captureUpvalue(Value* local) {
@@ -204,6 +246,16 @@ static void closeUpvalues(Value* last) {
 
         vm.openUpvalues = upvalue->next;
     }
+}
+
+static void defineMethod(ObjString* name) {
+    Value method = peek(0);
+
+    ObjClass* klass = AS_CLASS(peek(1));
+
+    tableSet(&klass->methods, name, method);
+
+    pop();
 }
 
 static bool isFalsey(Value value) {
@@ -530,9 +582,10 @@ static InterpretResult run() {
                     break;
                 }
 
-                runtimeError("Undefined property '%s'.", name->chars);
+                if (!bindMethod(instance->klass, name))
+                    return INTERPRET_RUNTIME_ERROR;
 
-                return INTERPRET_RUNTIME_ERROR;
+                break;
             }
 
             case OP_SET_PROPERTY: {
@@ -554,6 +607,11 @@ static InterpretResult run() {
 
                 break;
             }
+
+            case OP_METHOD:
+                defineMethod(READ_STRING());
+
+                break;
         }
     }
 
