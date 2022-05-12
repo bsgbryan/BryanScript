@@ -1,0 +1,17 @@
+class Super {
+    duper(dang) {
+        print "... well " + dang + "!";
+    }
+}
+
+class Sooper < Super {
+    ooper(fang) {
+        print "Oh my, " + fang + "?";
+
+        super.duper("well well");
+    }
+}
+
+var ohai = Sooper();
+
+ohai.ooper("shucks");
